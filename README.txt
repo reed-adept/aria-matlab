@@ -1,0 +1,184 @@
+
+Interface that provides a handful of essential features of ARIA in Matlab
+or Simulink for controlling the robot and receiving key information from it.
+
+ARIA Simple Interface for Matlab
+--------------------------------
+
+A collection of C files (in mex-src) defines MEX interfaces for some of the functions in ariac. 
+Build ariac using Visual Studio 2010, then run mexdefs.m in Matlab to compile the Mex interfaces.
+
+See example.m for a simple example.
+
+So far, the following functions will be available:
+
+aria_init [args]
+Initialize ARIA and store any ARIA arguments given. This function must be called
+first before any other of the following functions can be used. 
+
+arrobot_connect
+Connect to the robot and begin background communications/processing cycle thread.
+
+arrobot_disconnect
+Disconnect from the robot if connected and free/destory internally used memory/objects.
+
+x = arrobot_getx
+y = arrobot_gety
+t = arrobot_getth
+Get current position estimate from the robot
+
+arrobot_setvel v
+Set translational velocity
+
+arrobot_setrotvel v
+Set rotational velocity
+
+arrobot_stop
+Stop the robot
+
+v = arrobot_getbatteryvoltage
+Get battery voltage (real voltage, e.g. 0..13 for 12V system, 0..24 for 25V systems, etc.)
+
+s = arrobot_isstalled
+s = arrobot_isrightstalled
+s = arrobot_isleftstalled
+Return 1 if either wheel motor is in stalled state
+
+l = arrobot_length
+w = arrobot_width
+r = arrobot_radius
+Size of the robot
+
+n = arrobot_getnumsonar
+Number of sonar range readings
+
+r = arrobot_getsonarrange i
+Get range (mm) of sonar sensor i. 
+
+arrobot_setdigout d
+Set state of digital output bits according to bitmask (8 bits)
+
+d = arrobot_getdigin
+Get state (bitmask) of digital input bits (8 bits)
+
+arloginfo
+Log some internal debugging information about ariac.
+
+See documentation in ariac.h for more information.
+
+
+How to add new functions to the Matlab interface
+------------------------------------------------
+
+To add a feature to the Matlab interface that is not currently available,
+it must first be added to the ariac C library (if not already present in ariac).  
+Any objects needed for the new feature must be instantiated in arrobot_connect 
+or similar, and a pointer stored in ariac (see how ArRobot etc. are currently 
+created and stored).This object can be destroyed in the disconnect/exit 
+functions.  Generally, ariac should be robust against functions called more than 
+once, so check if the object has already been created before creating it a second time. 
+
+If you have called any of the Aria functions in your currently running Matlab
+instance, run "clear all" in Matlab to unload the functions and the ariac
+library/DLL.
+
+Then recompile ariac (using Visual C++ on Windows or make on Linux). 
+
+Next, a mexFunction must be created in a new source file in the mex-src directory
+that implements an interface between Matlab and the new function in ariac.
+The new source file in the mex-src directory determines the name of the function
+in Matlab, and should match the name of the new function in ariac.  This source
+file must contain a function called mexFunction which receives Matlab data structures
+containing any arguments given with the Matlab function call, and into which return
+values can be placed. See the existing functions in mex-src for examples, and the
+Matlab documentation for mexFunction ("doc mexFunction").
+
+Finally, add the new function to the list of functions in makemex.m, and re-run
+makemex.m in Matlab.
+
+
+
+
+
+ARIA Simple Interface for Simulink
+----------------------------------
+
+sdefs.m defines S-functions which can be used to create blocks
+in Simulink.  The "legacy code generator" is used, which defines the actual
+matlab S-functions.
+
+This interface uses a highly simplified C interface (wrapper) to ARIA 
+(ariac). It includes a subset of ArRobot functions for basic connection and 
+control of the robot.
+
+To generate the Simulink interfaces (MEX files with S-function definitions,
+and blocks for use in Simulink), you must build ARIA, ariac and the S-Functions.
+To build ARIA and ariac open the ariac solution file with Visual C++ 2010 and
+build the whole solution in "Release" mode.   Next, generate the S-Functions and 
+their MEX interfaces. A compiler must have been selected first by running 
+"mex -setup" in the Matlab command window (this only needs to be done once).  
+On Windows, choose Visual C++ 2010. 
+
+Then, run the "sdefs" script.  You can do this by navigating to this matlab 
+folder in the file browser, and then either  running "sdefs" in the command window, 
+right clicking on defs.m in the file browser and choosing Run, or opening defs.m 
+in the text editor and clicking "Run" in the toolbar.  For each function, the 
+sdefs.m script will generate an s-function wrapper and compile it, and generate a 
+simulink block in the ariac Simulink library (ariac-simulink-library/ariac.mlx),
+and refresh Simulink's block library browser.  
+
+You can add ariac-simulink-library to your Matlab path for 
+the ariac block library to appear in the Simulink block library whenever you 
+run Matlab. Do this by right clicking on ariac-simulink-library in the Matlab
+file browser, choosing "Add To Path", and choosing "This Folder".
+
+
+How to add new functions to the Simulink interface
+--------------------------------------------------
+
+To add a feature to the Matlab interface that is not currently available,
+it must first be added to the ariac C library.  Any objects needed for the
+new feature must be instantiated in arrobot_connect or similar, and a 
+pointer stored in ariac (see howArRobot etc. are currently created and stored).
+This object can be destroyed in the disconnect/exit functions.  Generally,
+ariac should be robust against functions called more than once, so check if 
+the object has already been created before creating it a second time.  
+
+If you have called any of the Aria functions in your currently running Matlab
+instance, run "clear all" in Matlab to unload the functions and the ariac
+library/DLL.
+
+Recompile ariac.
+
+Next, add the function to the list in sdefs, and re-run sdefs.m to 
+regenerate all the S-functions.
+
+
+About ariac
+-----------
+
+ariac is a simple functional C wrapper to ARIA that provides the minimum API for connecting to 
+a robot, receiving data from it, and controlling it by requesting velocities. All
+neccesary ARIA objects and other state are stored internally by ariac, so the
+caller (e.g. Matlab) does not need to store and pass in any object references,
+handles, identifiers or any other state -- only call functions.
+
+A Makefile is included which can build just this simple C interface as a library
+called libariac on Linux.  ariac links dynamically to ARIA.  Any program linking 
+to it must also link to ARIA and dependent libraries:
+
+On Linux, link to libAria, libdl, librt, libm, e.g.:
+  gcc -fPIC -o myprog myprog.c -L/usr/local/Aria/lib -lariac -lAria -lpthread -ldl -lrt -lm
+
+On Windows, link to Aria or AriaDebug, ws2_32 and winmm, and include the ARIA
+lib directory in the linker path. (Include the ARIA bin directory in system path
+or copy DLLs when running the program.)
+
+See ariac-test.c for a simple example of how ariac is used.
+
+Currently ariac asynchronously accesses the ArRobot object, using ArRobot's 
+lock() and unlock() functions to prevent incorrect simultaneous access by other
+threads such as ArRobot's processing cycle background thread. This can be changed
+in the future if neccesary to improve performance.   However, this will not affect
+ariac's public API, just its internal behavior and performance charactaristics.
+
