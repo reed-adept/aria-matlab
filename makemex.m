@@ -18,7 +18,10 @@ funcs = {
     'arrobot_getnumsonar',
     'arrobot_getdigin',
     'arrobot_setlatvel',
-    'arrobot_getbatteryvoltage'
+    'arrobot_getbatteryvoltage',
+    'arrobot_getvel',
+    'arrobot_getrotvel',
+    'arrobot_getlatvel'
 }
 
 % Unload mex functions etc.  Note, if you add a new mex function below that
