@@ -77,6 +77,7 @@ funcs = {
     {'arrobot_setlatvel', 'void arrobot_setlatvel(double u1)', 'Set lateral velocity of mobile robot (Seekur only) (mm/sec, rightwards +)'}
     {'arrobot_getvel', 'double y1 = arrobot_getvel()', 'Get current forward/back velocity of mobile robot (mm/sec)'}
     {'arrobot_getrotvel', 'double y1 = arrobot_getrotvel()', 'Get current rotational velocity of mobile robot (deg/sec, counterclockwise +)'}
+    {'arrobot_resetpos', 'void arrobot_resetpos()', 'Reset mobile robot odometric pose estimate to 0,0,0 (does not move robot in simulation)'}
 }
 
 clear arrobot_* aria_* arloginfo
@@ -85,7 +86,7 @@ switch computer
     case 'PCWIN'
         ariadll = '../bin/AriaVC10.dll'
         arialib = '../lib/AriaVC10.dll'
-        ariaclib = 'ariac_vc10.lib'
+        ariaclib = 'ariac_vc10_i386.lib'
         compileopts = {'-DWIN32', '-DMATLAB'}
     case 'PCWIN64'
         ariadll = '../bin64/AriaVC10.dll'

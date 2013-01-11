@@ -21,7 +21,9 @@ funcs = {
     'arrobot_getbatteryvoltage',
     'arrobot_getvel',
     'arrobot_getrotvel',
-    'arrobot_getlatvel'
+    'arrobot_getlatvel',
+    'arrobot_setdeltaheading',
+    'arrobot_resetpos'
 }
 
 % Unload mex functions etc.  Note, if you add a new mex function below that
@@ -34,9 +36,9 @@ clear aria_* arloginfo arrobot_*
 def = ''
 switch computer
     case 'PCWIN'
-        ariaclink = '-L. -lariac_vc10'
+        ariaclink = '-L. -lariac_vc10_i386'
         arialink = '-L../lib -lAriaVC10'
-        def = '-DWIN32'
+        def = '-DWIN32 -win32'
         ariadll = '../bin/AriaVC10.dll'
     case 'PCWIN64'
         ariaclink = '-L. -lariac_vc10_x64'
@@ -57,12 +59,12 @@ switch computer
 end
 
 % Get ARIA runtime library
-eval(['copyfile ' ariadll '.'])
+%eval(['copyfile ' ariadll '.'])
 
 % Compile all the mex functions:
 
 for i = 1:length(funcs)
-  cmd = sprintf('mex -g %s -DMATLAB -I. %s %s mex-src/%s.c', def, ariaclink, arialink, funcs{i});
+  cmd = sprintf('mex -g -v %s -DMATLAB -I. %s %s mex-src/%s.c', def, ariaclink, arialink, funcs{i});
   cmd
   eval(cmd)
 end

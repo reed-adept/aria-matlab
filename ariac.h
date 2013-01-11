@@ -121,6 +121,7 @@ AREXPORT void arrobot_setvel(double vel);
 AREXPORT void arrobot_setvel2(double left, double right);
 AREXPORT void arrobot_setrotvel(double rotvel);
 AREXPORT void arrobot_setlatvel(double vel);
+AREXPORT void arrobot_setdeltaheading(double dh);
 AREXPORT void arrobot_setdigout(char c);
 AREXPORT double arrobot_getbatteryvoltage();
 AREXPORT int arrobot_num_front_bumpers();
@@ -134,6 +135,8 @@ AREXPORT char arrobot_get_rear_bumpers();
 
 /** Return 1 if front bumper @arg i is currently pressed */
 AREXPORT int arrobot_get_rear_bumper(int i);
+
+AREXPORT void arrobot_resetpos();
 
 #ifdef __cplusplus
 } // close extern "C"

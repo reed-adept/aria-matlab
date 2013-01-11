@@ -538,3 +538,12 @@ AREXPORT void arrobot_setdeltaheading(double d)
   robot->setDeltaHeading(d);
   robot->unlock();
 }
+
+AREXPORT void arrobot_resetpos()
+{
+  AR_DEBUG_LOGINFO();
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->com(ArCommands::SETO);
+  robot->unlock();
+}

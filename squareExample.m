@@ -1,12 +1,15 @@
 
+% simple example that drives robot to a series of positions
+
 points = {{3000, 0}, {3000, 3000}, {0, 3000}, {0, 0}}
 velMult = 0.5
-distThresh = 300 % mm
+distThresh = 350 % mm
 angleThresh = 0.5 % deg
 
-aria_init
-arrobot_connect
-curPoint = 0
+aria_init -rh 10.0.200.42 -ris
+arrobot_connect()
+arrobot_resetpos()
+curPoint = 1
 
 while (true)
   % get current robot position from aria
@@ -15,16 +18,18 @@ while (true)
 
   % Check if we've reached goal point
   p = points{curPoint}
-  d = pdist({p, {rx, ry}})
-  disp sprintf(' distance remaining: %f', d)
-  if d <= distThresh:
+  px = p{1}
+  py = p{2}
+  d = sqrt( (px - rx)^2 + (py - ry)^2 )
+  disp(sprintf(' distance remaining: %f', d))
+  if d <= distThresh
     disp 'reached point'
     arrobot_stop
 
     % choose next point in list
-    curPoint += 1
+    curPoint = curPoint + 1
     if curPoint > length(points)
-      curPoint = 0
+      curPoint = 1
     end
     p = points{curPoint} 
     px = p{1}
@@ -32,8 +37,23 @@ while (true)
 
     % determine how far to rotate to face this next point
     rt = arrobot_getth
-    dt = radtodeg(atan2(py - ry, px - rx)) - rt
-    dt = ((dt + 180) mod 360) - 180 % restrict to (-180,180)
+    dt =  (atan2(py - ry, px - rx) * (180/3.14159)) - rt
+    dt = mod((dt + 180), 360) - 180 % restrict to (-180,180)
+
+    
+    % restrict to (-180,180)
+%     if (dt >= 360)
+%         dt = dt - 360.0 * (dt / 360)
+%     end
+%     if (dt < -360)
+%         dt = dt + 360.0 * (dt / -360)
+%     end
+%     if (dt <= -180)
+%         dt = + 180.0 + (dt + 180.0)
+%     end
+%     if (dt > 180)
+%         dt = - 180.0 + (dt - 180.0)
+%     end
 
     % request robot to turn
     disp(sprintf('Turning by %d deg.', dt))
@@ -41,9 +61,10 @@ while (true)
 
     % wait until heading change is achieved within specified threshold
     target = rt + dt
+    target = mod((target + 180), 360) - 180 % restrict to (-180,180)
     while abs(arrobot_getth - target) > angleThresh  % note, get newest robot theta from aria each time
       disp(sprintf(' angle remaining %f', abs(arrobot_getth - target)))
-      pause(100)
+      pause(0.08)
     end
     disp 'Heading done.'
   else
@@ -52,7 +73,7 @@ while (true)
     % Could also set delta heading or rotational velocity here to continuously
     % correct angle as well.
   end
-  pause(100)
+  pause(0.08)
 end
 
 
