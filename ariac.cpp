@@ -529,3 +529,12 @@ AREXPORT int arrobot_get_rear_bumper(int i)
 	arrobot_get_bumpers(NULL, &rb);
 	return rb & (ArUtil::BIT0 << i);
 }
+
+AREXPORT void arrobot_setdeltaheading(double d)
+{
+  AR_DEBUG_LOGINFO();
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->setDeltaHeading(d);
+  robot->unlock();
+}
