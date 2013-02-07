@@ -7,8 +7,15 @@ ARIA Simple Interface for Matlab
 
 A collection of C files (in mex-src) defines MEX interfaces for some of the functions in ariac. 
 Build ariac using Visual Studio 2010, then run mexdefs.m in Matlab to compile the Mex interfaces.
+(The Mex interfaces require ariac.dll and AriaVC10.dll to be present in the matlab directory to 
+build and run.)
 
-See example.m for a simple example.
+To run any scripts/programs using the Aria functions, the matlab directory (containing the compiled
+Mex objects as well as ariac.dll and AriaVC10.dll) must be in your Matlab path. It can be added
+by right-clicking on the matlab directory in the file browser in Matlab and selecting "Add To Path",
+and "This Folder".
+
+See example.m for a simple example of use.
 
 So far, the following functions will be available:
 
@@ -66,11 +73,19 @@ Log some internal debugging information about ariac.
 
 See documentation in ariac.h for more information.
 
+Currently the Aria Matlab interface can only connect to one robot, and can
+only connect directly to the robot via serial connection (by running
+on an onboard computer or computer directly connected), or a TCP
+connection to a robot's wifi interface device.
+
 
 How to add new functions to the Matlab interface
 ------------------------------------------------
 
-To add a feature to the Matlab interface that is not currently available,
+The Aria-Matlab interface is intended to be a base upon which any additional features 
+and functions you require can be easily added.
+
+To add a function to the Matlab interface that is not currently available,
 it must first be added to the ariac C library (if not already present in ariac).  
 Any objects needed for the new feature must be instantiated in arrobot_connect 
 or similar, and a pointer stored in ariac (see how ArRobot etc. are currently 

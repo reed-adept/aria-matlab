@@ -37,13 +37,13 @@ def = ''
 switch computer
     case 'PCWIN'
         ariaclink = '-L. -lariac_vc10_i386'
-        arialink = '-L../lib -lAriaVC10'
+        arialink = '-L../lib -L../bin -lAriaVC10'
         def = '-DWIN32 -win32'
         ariadll = '../bin/AriaVC10.dll'
     case 'PCWIN64'
         ariaclink = '-L. -lariac_vc10_x64'
         def = '-DWIN32'
-        arialink = '-L../lib64 -lAriaVC10'
+        arialink = '-L../lib64 -L../bin64 -lAriaVC10'
         ariadll = '../bin64/AriaVC10.dll'
     case 'GLNX86'
         ariaclink = '-L. -lariac'
@@ -54,12 +54,12 @@ switch computer
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
     otherwise
-        disp 'what kind of computer are you on?'
+        disp 'error, unrecognized system type. (what kind of computer and OS are you on?)'
         computer
 end
 
 % Get ARIA runtime library
-%eval(['copyfile ' ariadll '.'])
+eval(['copyfile ' ariadll '.'])
 
 % Compile all the mex functions:
 
