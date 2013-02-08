@@ -30,7 +30,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
    argv = (char**)malloc((1+nrhs) * sizeof(char*));
    scriptname = mexFunctionName();
    snlen = strlen(scriptname);
-   argv[0] = (char*)malloc(snlen);
+   argv[0] = (char*)malloc(snlen+1);
    strncpy(argv[0], scriptname, snlen);
    //mexPrintf("argv[0]=%s\n", argv[0]);
    for(ai = 1, pi = 0; pi < nrhs; ++pi, ++ai)
@@ -43,7 +43,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
        }
        //mexPrintf("prhs[%d]=%s\n", pi, buf);
        n = strlen(buf);
-       argv[ai] = (char*)malloc(n);
+       argv[ai] = (char*)malloc(n+1);
        strncpy(argv[ai], buf, n);
        //mexPrintf("argv[%d]=%s\n", ai, argv[ai]);
    }
