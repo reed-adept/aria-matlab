@@ -159,6 +159,7 @@ int arrobot_connect()
     return 0;
   }
   if(connected) return 1;
+  argParser->log();
   ArLog::log(ArLog::Normal, "arrobot_connect: Connecting to robot...");
   robot = new ArRobot;
   robotConnector = new ArRobotConnector(argParser, robot);
