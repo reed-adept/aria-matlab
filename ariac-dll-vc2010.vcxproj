@@ -69,19 +69,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">./</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">./</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj/$(ProjectName)-$(Configuration)-VC10/</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">obj/$(ProjectName)-$(Configuration)-VC10-x64/</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">./</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">./</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj/$(ProjectName)-$(Configuration)-VC10/</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">obj/$(ProjectName)-$(Configuration)-VC10-x64/</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ariacDebugVC10</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ariac_debug_vc10_i386</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ariac_vc10_x64.dll</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ariac_vc10_i386</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ariac_vc10_x64</TargetName>
@@ -231,7 +231,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>AriaStaticDebugVC10.lib;winmm.lib;ws2_32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>AriaDebugVC10.lib;winmm.lib;ws2_32.lib;advapi32.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
       <Version>
       </Version>
@@ -241,7 +241,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>ariac_vc10_i386.lib</ImportLibrary>
+      <ImportLibrary>ariac_debug_vc10_i386.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>../lib</AdditionalLibraryDirectories>
     </Link>

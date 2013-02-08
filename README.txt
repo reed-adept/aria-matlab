@@ -1,6 +1,11 @@
 
-Interface that provides a handful of essential features of ARIA in Matlab
+Interfaces that provide a handful of essential features of ARIA in Matlab
 or Simulink for controlling the robot and receiving key information from it.
+
+After retrieving this repository, move and rename the resulting directory to
+a subdirectory of the Aria installation location: /usr/local/Aria/matlab on Linux
+or C:\Program Files\MobileRobots\Aria\matlab on Windows.
+
 
 ARIA Simple Interface for Matlab
 --------------------------------
