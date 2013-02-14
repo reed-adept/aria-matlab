@@ -11,9 +11,9 @@ int main(int argc, char **argv)
     if(!arrobot_connect())
       return 1 ;
     printf("radius=%.2f, length=%.2fmm, width=%.2fmm\n", 
-      arrobot_robot_radius(),
-      arrobot_robot_length(),
-      arrobot_robot_width()
+      arrobot_radius(),
+      arrobot_length(),
+      arrobot_width()
     );
     arrobot_setvel(200);
     arrobot_setrotvel(10);
