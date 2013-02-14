@@ -18,7 +18,11 @@ build and run.)
 To run any scripts/programs using the Aria functions, the matlab directory (containing the compiled
 Mex objects as well as ariac.dll and AriaVC10.dll) must be in your Matlab path. It can be added
 by right-clicking on the matlab directory in the file browser in Matlab and selecting "Add To Path",
-and "This Folder".
+and "This Folder". Or use the path command: 
+    Linux:     path(path, '/usr/local/Aria/matlab')
+	Windows:   path(path, 'C:\Program Files\MobileRobots\Aria\matlab')
+    Or if your current directory is the ARia matlab directory: 
+	           path(path, '.')  
 
 See example.m for a simple example of use.
 
