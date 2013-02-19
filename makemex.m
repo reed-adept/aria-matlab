@@ -58,13 +58,17 @@ switch computer
         ariaclink = '-L. -lariac'
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
+	case 'MACI64'
+	    disp 'Sorry, not set up for Mac yet. You will need to get ARIA and ariac built on Mac, then edit makemex.m to set the appropriate mex compilation flags under the MACI64 computer type case instead of displaying this message..'
+        return
     otherwise
         disp 'error, unrecognized system type. (what kind of computer and OS are you on?)'
         computer
+		return
 end
 
 % Get ARIA runtime library
-eval(['copyfile ' ariadll '.'])
+eval(['copyfile ' ariadll ' .'])
 
 % Compile all the mex functions:
 
