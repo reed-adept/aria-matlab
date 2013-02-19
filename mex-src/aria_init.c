@@ -32,7 +32,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
    snlen = strlen(scriptname);
    argv[0] = (char*)malloc(snlen+1);
    strncpy(argv[0], scriptname, snlen);
-   //mexPrintf("argv[0]=%s\n", argv[0]);
+   mexPrintf("nrhs=%d, argv[0]=%s\n", nrhs, argv[0]);
    for(ai = 1, pi = 0; pi < nrhs; ++pi, ++ai)
    {
        memset(buf, 0, 256);
@@ -41,11 +41,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
            mexPrintf("aria_init: error copying argument %d from matlab. not a string or too long. aborting without initializing aria.");
            return;
        }
-       //mexPrintf("prhs[%d]=%s\n", pi, buf);
+       mexPrintf("prhs[%d]=%s\n", pi, buf);
        n = strlen(buf);
        argv[ai] = (char*)malloc(n+1);
-       strncpy(argv[ai], buf, n);
-       //mexPrintf("argv[%d]=%s\n", ai, argv[ai]);
+       strncpy(argv[ai], buf, n+1);
+       mexPrintf("argv[%d]=%s\n", ai, argv[ai]);
    }
    
    aria_init(nrhs+1, argv);

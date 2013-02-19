@@ -27,7 +27,7 @@
 #ifndef ARIA_STATIC
 #ifndef AREXPORT
 #ifdef WIN32
-//#error Defining function declspec for dllimport...
+
 #define AREXPORT __declspec(dllimport) extern
 #else
 #define AREXPORT   

@@ -11,36 +11,18 @@ ARIA Simple Interface for Matlab
 --------------------------------
 
 A collection of C files (in mex-src) defines MEX interfaces for some of the functions in ariac. 
-
-Requirements: 
- * ARIA 2.7.x or later
- * Visual Studio 2010
- * Matlab 2012b (other versions may work but are untested)
- * Windows 7 (other operating systems including Linux should work, but are untested)
-
-Build:
- 1. This directory should be a subdirectory of ARIA named "matlab" (see above).
- 2. Build ariac in Release mode using Visual Studio 2010 by opening ariac-vc2010.sln, choosing Release mode, and building the ariac-dll project.
- 3. Open Matlab and navigate to this matlab directory.
- 4. Add this matlab directory to the Matlab path by right-clicking on it in the Matlab file browser and selecting "Add To Path" then "This Folder".
- 5. Run makemex.m in Matlab to compile the Mex interfaces. It will also copy AriaVC10.dll into the matlab directory.
- 
- 
-The Mex interfaces require ariac.dll and AriaVC10.dll to be present in the matlab directory to 
-build and run.
+Build ariac using Visual Studio 2010, then run mexdefs.m in Matlab to compile the Mex interfaces.
+(The Mex interfaces require ariac.dll and AriaVC10.dll to be present in the matlab directory to 
+build and run.)
 
 To run any scripts/programs using the Aria functions, the matlab directory (containing the compiled
 Mex objects as well as ariac.dll and AriaVC10.dll) must be in your Matlab path. It can be added
 by right-clicking on the matlab directory in the file browser in Matlab and selecting "Add To Path",
-and "This Folder". Or use the path command: 
-    Linux:     path(path, '/usr/local/Aria/matlab')
-	Windows:   path(path, 'C:\Program Files\MobileRobots\Aria\matlab')
-    Or if your current directory is the ARia matlab directory: 
-	           path(path, '.')  
+and "This Folder".
 
 See example.m for a simple example of use.
 
-So far, the following functions are available:
+So far, the following functions will be available:
 
 aria_init [args]
 Initialize ARIA and store any ARIA arguments given. This function must be called

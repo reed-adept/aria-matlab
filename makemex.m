@@ -52,22 +52,19 @@ switch computer
         ariaclink = '-L. -lariac'
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
+		
     case 'GLNXA64'
 		ariainstdir = '/usr/local/Aria'
         ariaclink = '-L. -lariac'
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
-	case 'MACI64'
-		disp 'Sorry, not set up for Mac yet. You will need to get ARIA and ariac built on Mac, then edit makemex.m to set the appropriate mex compilation flags under the MACI64 computer type case instead of displaying this message..'
-		return
-	otherwise
+    otherwise
         disp 'error, unrecognized system type. (what kind of computer and OS are you on?)'
         computer
-		return
 end
 
 % Get ARIA runtime library
-eval(['copyfile ' ariadll ' .'])
+eval(['copyfile ' ariadll '.'])
 
 % Compile all the mex functions:
 
@@ -78,7 +75,6 @@ for i = 1:length(funcs)
 end
 
 %{
-old script commands commented out
 
 eval( ['mex -g ' def '-DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/aria_init.c'] )
 mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_connect.c

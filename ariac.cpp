@@ -103,6 +103,7 @@ AREXPORT void arloginfo(const char* m)
 }
     
 
+/*
   
 AREXPORT void start_arrobot() 
 {
@@ -118,6 +119,7 @@ AREXPORT void terminate_arrobot()
   arrobot_disconnect();
   //unload_aria();
 }
+*/
   
 
 int aria_init(int _argc, char **_argv)
@@ -130,6 +132,7 @@ int aria_init(int _argc, char **_argv)
 #endif
   argc = _argc;
   argv = _argv;
+  ArLog::log(ArLog::Normal, "aria_init(%d, 0x%x)", argc, argv);
   argParser = new ArArgumentParser(&argc, argv);
   argParser->loadDefaultArguments();
   init = true;
