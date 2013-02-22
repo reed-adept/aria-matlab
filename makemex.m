@@ -23,7 +23,10 @@ funcs = {
     'arrobot_getrotvel',
     'arrobot_getlatvel',
     'arrobot_setdeltaheading',
-    'arrobot_resetpos'
+    'arrobot_resetpos',
+	'arrobot_isstalled',
+	'arrobot_isleftstalled',
+	'arrobot_isrightstalled'
 }
 
 % Unload mex functions etc.  Note, if you add a new mex function below that

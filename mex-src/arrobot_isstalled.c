@@ -12,7 +12,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		mexErrMsgIdAndTxt("arrobot_isstalled", "One output required.");
 		return;
 	}
-	plhs[0] = mxCreateNumericMatrix(1, 1, mxINT32CLASS, mxREAL);
+	plhs[0] = mxCreateNumericMatrix(1, 1, mxINT32_CLASS, mxREAL);
     *((int32_T*)mxGetData(plhs[0])) = arrobot_isstalled();
 }
 	

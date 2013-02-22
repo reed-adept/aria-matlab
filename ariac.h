@@ -61,10 +61,11 @@ disconnection must happen separately from access.
     
 AREXPORT void arloginfo(const char *m);
 
-AREXPORT void load_aria();
-AREXPORT void unload_aria();
-AREXPORT void start_arrobot();
-AREXPORT void terminate_arrobot();
+/*unused:*/
+/*AREXPORT void load_aria();*/
+/*AREXPORT void unload_aria();*/
+/*AREXPORT void start_arrobot();*/
+/*AREXPORT void terminate_arrobot();*/
 
 /** Initialize library, store references to command line arguments if given.
  * Only needs to be called once before any other functions. */
