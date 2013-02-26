@@ -6,7 +6,8 @@ velMult = 0.5
 distThresh = 350 % mm
 angleThresh = 0.5 % deg
 
-aria_init -rh 10.0.200.42 -ris
+%aria_init -rh 10.0.200.42 -ris
+aria_init
 arrobot_connect()
 arrobot_resetpos()
 curPoint = 1
