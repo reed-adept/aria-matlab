@@ -1,4 +1,3 @@
-
 Interfaces that provide a handful of essential features of ARIA in Matlab
 or Simulink.
 
@@ -14,8 +13,8 @@ A collection of C files (in mex-src) defines MEX interfaces for some of the func
 
 
 Requirements: 
- * ARIA 2.7.5.2
- * Visual Studio 2010
+ * ARIA 2.7.5.2 <http://robots.mobilerobot.com/wiki/ARIA>
+ * Visual Studio 2010 <http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express>
  * Matlab 2012b (other versions may work but are untested)
  * Windows 7 
 
