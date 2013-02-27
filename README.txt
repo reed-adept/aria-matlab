@@ -13,7 +13,7 @@ A collection of C files (in mex-src) defines MEX interfaces for some of the func
 
 
 Requirements: 
- * ARIA 2.7.5.2 <http://robots.mobilerobot.com/wiki/ARIA>
+ * ARIA 2.7.5.2 <http://robots.mobilerobots.com/wiki/ARIA>
  * Visual Studio 2010 <http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express>
  * Matlab 2012b (other versions may work but are untested)
  * Windows 7 
