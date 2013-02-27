@@ -14,10 +14,12 @@ A collection of C files (in mex-src) defines MEX interfaces for some of the func
 
 
 Requirements: 
- * ARIA 2.7.x or later
+ * ARIA 2.7.5.2
  * Visual Studio 2010
  * Matlab 2012b (other versions may work but are untested)
- * Windows 7 (other operating systems including Linux should work, but are untested)
+ * Windows 7 
+
+(Linux, using G++ 4.x, or other versions of Windows, may work, but is untested.)
 
 Build:
  1. This directory should be a subdirectory of ARIA named "matlab" (see above).
