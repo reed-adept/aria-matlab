@@ -27,7 +27,8 @@ funcs = {
 	  'arrobot_isstalled',
 	  'arrobot_isleftstalled',
   	'arrobot_isrightstalled',
-    'arrobot_setwheelvels'
+    'arrobot_setwheelvels',
+    'arrobot_move'
 }
 
 % Unload old mex functions etc.  Note, if you add a new mex function above that
@@ -58,13 +59,13 @@ switch computer
         ariaclink = '-L. -lariac'
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
-		disp 'You are on Linux 32 bit. Will attempt to use libAria.so and libariac.so.
+		disp 'You are on Linux 32 bit. Will attempt to use libAria.so and libariac.so.'
     case 'GLNXA64'
 		ariainstdir = '/usr/local/Aria'
         ariaclink = '-L. -lariac'
         arialink = '-L../lib -lAria'
         ariadll = '../lib/libAria.so'
-		disp 'You are on Linux 64 bit. Will attempt to use libAria.so and libariac.so.
+		disp 'You are on Linux 64 bit. Will attempt to use libAria.so and libariac.so.'
 	case 'MACI64'
 	    disp 'Sorry, not set up for Mac yet. You will need to get ARIA and ariac built on Mac, then edit makemex.m to set the appropriate mex compilation flags under the MACI64 computer type case instead of displaying this message..'
         return
@@ -75,8 +76,8 @@ switch computer
 end
 
 % Put a copy of the ARIA runtime library into the current directory
-disp 'Copying ARIA DLL into current directory so Matlab can easily find it...'
-eval(['copyfile ' ariadll ' .'])
+%disp 'Copying ARIA DLL into current directory so Matlab can easily find it...'
+%eval(['copyfile ' ariadll ' .'])
 
 % Compile all the mex functions listed above:
 

@@ -14,9 +14,9 @@ A collection of C files (in mex-src) defines MEX interfaces for some of the func
 
 Requirements: 
  * ARIA 2.7.5.2 <http://robots.mobilerobots.com/wiki/ARIA>
- * Visual Studio 2010 <http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express>
+ * Visual C++ 2010 <http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express>
  * Matlab 2012b (other versions may work but are untested)
- * Windows 7 
+ * Windows 7
 
 (Linux, using G++ 4.x, or other versions of Windows, may work, but is untested.)
 
@@ -26,6 +26,12 @@ Build:
  3. Open Matlab and navigate to this matlab directory.
  4. Add this matlab directory to the Matlab path by right-clicking on it in the Matlab file browser and selecting "Add To Path" then "This Folder".
  5. Run makemex.m in Matlab to compile the Mex interfaces. It will also copy AriaVC10.dll into the matlab directory.
+    -> If you have not yet configure mex for compilation, it will prompt you to do so.  Choose Microsoft Visual C++ 10.0.  
+      If you have already configured mex, but for a different compiler, run mex -setup in the command window.
+      If Matlab does not automatically locate Visual C++ 10.0 when locating installed compilers, run mex -setup again, and
+      enter N when promted to locate installed compilers, then choose Microsoft Visual C++ from the list.  (Note: Make sure
+      that the path is correct; if the path does not exist, you may need to manually enter the actual path as installed
+      on your system.) 
  
  
 The Mex interfaces require ariac.dll and AriaVC10.dll to be present in the matlab directory to 
@@ -40,7 +46,10 @@ Or use the path command:
 	Windows:   path(path, 'C:\Program Files\MobileRobots\Aria\matlab')
     Or if your current directory is the ARia matlab directory: 
 	           path(path, '.')  
- 
+
+Or, to permanently add it to your path, click the "Set Path" button in the Matlab toolbar
+("Home" tab), and add the Aria matlab subdirectory to the top of the list. 
+
 See example.m for a simple example of use.
  
 So far, the following functions are available:

@@ -28,6 +28,7 @@
 #include "ArRobotConnector.h"
 #include "ArArgumentParser.h"
 #include "ArCommands.h"
+#include "ArRobotConfigPacketReader.h"
 
 #ifndef AREXPORT
 #error ARIA headers did not define AREXPORT
@@ -97,8 +98,12 @@ AREXPORT void arloginfo(const char* m)
         args += argv[i];
         args += " ";
     }   
-    ArLog::log(ArLog::Terse, "%s: init=%d connected=%d argParser=0x%x robot=0x%x robotConnector=0x%x argc=%d argv=0x%x (%s)",
+    ArLog::log(ArLog::Terse, "%s: init=%d connected=%d argParser=0x%x robot=0x%x robotConnector=0x%x argc=%d argv=0x%x (%s) MU",
             m, init, connected, argParser, robot, robotConnector, argc, argv, args.c_str());
+	if(robot)
+		robot->getOrigRobotConfig()->log();
+	else
+		ArLog::log(ArLog::Terse, "no robot object.");
  
 }
     
@@ -125,7 +130,10 @@ AREXPORT void terminate_arrobot()
 int aria_init(int _argc, char **_argv)
 {
   AR_DEBUG_LOGINFO();
-  if(init) return 1;
+  if(init) {
+	ArLog::log(ArLog::Normal, "aria_init: Already initialized.");
+	return 1;
+  }
   Aria::init();
 #ifdef MATLAB
   aria_setloghandler(&mexLog);
@@ -161,7 +169,10 @@ int arrobot_connect()
     ArLog::log(ArLog::Terse, "arrobot_connect: Error: aria_init() must be called before arrobot_connect().");
     return 0;
   }
-  if(connected) return 1;
+  if(connected) {
+	  ArLog::log(ArLog::Normal, "arrobot_connect: Already connected.");
+	  return 1;
+  }
   argParser->log();
   ArLog::log(ArLog::Normal, "arrobot_connect: Connecting to robot...");
   robot = new ArRobot;
@@ -431,6 +442,7 @@ AREXPORT void arrobot_setvel(double vel)
 	AR_DEBUG_LOGINFO();
   AR_ASSERT_RETURN(robot);
   robot->lock();
+  ArLog::log(ArLog::Normal, "setVel(%f)\n", vel);
   robot->setVel(vel);
   robot->unlock();
 }
@@ -546,6 +558,18 @@ AREXPORT void arrobot_resetpos()
   AR_DEBUG_LOGINFO();
   AR_ASSERT_RETURN(robot);
   robot->lock();
+  ArPose p = robot->getPose();
   robot->com(ArCommands::SETO);
+  robot->moveTo(ArPose(0, 0, 0), p);
+  ArLog::log(ArLog::Normal, "arrobot_resetpos: Reset robot odometery to origin and transformed ArRobot pose, it is now %0.2f, %0.2f, %0.2f.\n", robot->getX(), robot->getY(), robot->getTh());
   robot->unlock();
+}
+
+AREXPORT void arrobot_move(double d)
+{
+	AR_DEBUG_LOGINFO();
+	AR_ASSERT_RETURN(robot);
+	robot->lock();
+	robot->move(d);
+	robot->unlock();
 }

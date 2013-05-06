@@ -146,6 +146,8 @@ AREXPORT int arrobot_get_rear_bumper(int i);
 
 AREXPORT void arrobot_resetpos();
 
+AREXPORT void arrobot_move(double d);
+
 #ifdef __cplusplus
 } // close extern "C"
 #endif
