@@ -119,7 +119,14 @@ AREXPORT void arrobot_getsonar(double s[AR_MAX_NUM_SONAR]);
 AREXPORT void arrobot_setpose(double x, double y, double th);
 AREXPORT void arrobot_stop();
 AREXPORT void arrobot_setvel(double vel);
-AREXPORT void arrobot_setvel2(double left, double right);
+AREXPORT void arrobot_setwheelvels(double left, double right);
+
+///@deprecated
+void arrobot_setvel2(double left, double right)
+{
+  arrobot_setwheelvels(left, right);
+}
+
 AREXPORT void arrobot_setrotvel(double rotvel);
 AREXPORT void arrobot_setlatvel(double vel);
 AREXPORT void arrobot_setdeltaheading(double dh);

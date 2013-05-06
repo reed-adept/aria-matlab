@@ -435,9 +435,7 @@ AREXPORT void arrobot_setvel(double vel)
   robot->unlock();
 }
 
-
-
-AREXPORT void arrobot_setvel2(double left, double right)
+AREXPORT void arrobot_setwheelvels(double left, double right)
 {
 	AR_DEBUG_LOGINFO();
   AR_ASSERT_RETURN(robot);

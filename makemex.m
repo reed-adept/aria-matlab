@@ -24,12 +24,13 @@ funcs = {
     'arrobot_getlatvel',
     'arrobot_setdeltaheading',
     'arrobot_resetpos',
-	'arrobot_isstalled',
-	'arrobot_isleftstalled',
-	'arrobot_isrightstalled'
+	  'arrobot_isstalled',
+	  'arrobot_isleftstalled',
+  	'arrobot_isrightstalled',
+    'arrobot_setwheelvels'
 }
 
-% Unload mex functions etc.  Note, if you add a new mex function below that
+% Unload old mex functions etc.  Note, if you add a new mex function above that
 % does not match these patterns, add it to this list or a pattern that
 % matches it.
 clear aria_* arloginfo arrobot_*
@@ -73,11 +74,11 @@ switch computer
 		return
 end
 
-% Get ARIA runtime library
+% Put a copy of the ARIA runtime library into the current directory
 disp 'Copying ARIA DLL into current directory so Matlab can easily find it...'
 eval(['copyfile ' ariadll ' .'])
 
-% Compile all the mex functions:
+% Compile all the mex functions listed above:
 
 for i = 1:length(funcs)
   cmd = sprintf('mex -g -v %s -DMATLAB -I. %s %s mex-src/%s.c', def, ariaclink, arialink, funcs{i});
@@ -85,17 +86,3 @@ for i = 1:length(funcs)
   eval(cmd)
 end
 
-%{
-
-eval( ['mex -g ' def '-DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/aria_init.c'] )
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_connect.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_disconnect.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arloginfo.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_setvel.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_setrotvel.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_getx.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_gety.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_getth.c
-mex -g -DWIN32 -DMATLAB -I. -L. -lariac_vc10_x64 -L../lib64 -lAriaVC10 mex-src/arrobot_stop.c
-
-%}
