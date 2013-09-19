@@ -16,6 +16,7 @@ void mexLog(const char *s)
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
+
    int pi;
    int ai;
    char **arg;

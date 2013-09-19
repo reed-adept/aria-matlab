@@ -1,0 +1,6 @@
+
+Add these functions:
+
+arrobot_getsonarobs  (list)
+arrobot_getsonar (list)
+arrobot_getpose (vector)

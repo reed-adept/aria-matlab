@@ -55,6 +55,7 @@ AREXPORT void mexLog(const char *s)
   * each variable. (I.e. optimize for very frequent independent access of each
   * value.)
   * 3. cycle counter
+  * 4. Include access to ArRobot callbacks including robot cycle tasks and connection callbacks.  
   */
 
 
@@ -72,6 +73,7 @@ AREXPORT void mexLog(const char *s)
     } \
 }
 
+// Switch the following to print debugging information at the start of every function call
 /*
 #ifdef _MSC_VER
 #define AR_DEBUG_LOGINFO() { arloginfo(__FUNCTION__); }
@@ -98,7 +100,7 @@ AREXPORT void arloginfo(const char* m)
         args += argv[i];
         args += " ";
     }   
-    ArLog::log(ArLog::Terse, "%s: init=%d connected=%d argParser=0x%x robot=0x%x robotConnector=0x%x argc=%d argv=0x%x (%s) MU",
+    ArLog::log(ArLog::Terse, "%s: init=%d connected=%d argParser=0x%x robot=0x%x robotConnector=0x%x argc=%d argv=0x%x (%s)",
             m, init, connected, argParser, robot, robotConnector, argc, argv, args.c_str());
 	if(robot)
 		robot->getOrigRobotConfig()->log();
@@ -108,26 +110,7 @@ AREXPORT void arloginfo(const char* m)
 }
     
 
-/*
-  
-AREXPORT void start_arrobot() 
-{
-  //load_aria();
-  AR_DEBUG_LOGINFO();        
-  aria_init(0, NULL);
-  if(!arrobot_connect()) return;
-}
-
-AREXPORT void terminate_arrobot()
-{
-  AR_DEBUG_LOGINFO();
-  arrobot_disconnect();
-  //unload_aria();
-}
-*/
-  
-
-int aria_init(int _argc, char **_argv)
+AREXPORT int aria_init(int _argc, char **_argv)
 {
   AR_DEBUG_LOGINFO();
   if(init) {
@@ -161,7 +144,7 @@ void disconnected()
 
 ArGlobalFunctor disconnectCB(&disconnected);
 
-int arrobot_connect()
+AREXPORT int arrobot_connect()
 {
   AR_DEBUG_LOGINFO();
   if(!init)
@@ -240,6 +223,7 @@ AREXPORT void aria_exit(int code)
 AREXPORT double arrobot_getx()
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double x = robot->getX();
@@ -250,6 +234,7 @@ AREXPORT double arrobot_getx()
 AREXPORT double arrobot_gety()
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double y = robot->getY();
@@ -260,6 +245,7 @@ AREXPORT double arrobot_gety()
 AREXPORT double arrobot_getth()
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double th = robot->getTh();
@@ -267,9 +253,30 @@ AREXPORT double arrobot_getth()
   return th;
 }
 
+AREXPORT arpose arrobot_getpose()
+{
+  AR_DEBUG_LOGINFO();
+  arpose cp;
+  if(!connected)
+  {
+	cp.x = 0;
+	cp.y = 0;
+	cp.th = 0;
+	return cp;
+  }
+  robot->lock();
+  ArPose p = robot->getPose();
+  robot->unlock();
+  cp.x = p.getX();
+  cp.y = p.getY();
+  cp.th = p.getTh();
+  return cp;
+}
+
 AREXPORT double arrobot_getvel()
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double v = robot->getVel();
@@ -279,7 +286,8 @@ AREXPORT double arrobot_getvel()
 
 AREXPORT double arrobot_getrotvel()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double v = robot->getRotVel();
@@ -289,7 +297,8 @@ AREXPORT double arrobot_getrotvel()
 
 AREXPORT double arrobot_getlatvel()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double v = robot->getLatVel();
@@ -297,30 +306,52 @@ AREXPORT double arrobot_getlatvel()
   return v;
 }
 
+AREXPORT arpose arrobot_getvels()
+{
+  AR_DEBUG_LOGINFO();
+  arpose p;
+  if(!connected) {
+	p.x = 0;
+    p.y = 0;
+    p.th = 0;
+    return p;
+  }
+  robot->lock();
+  p.x = robot->getVel();
+  p.y = robot->getLatVel();
+  p.th = robot->getRotVel();
+  robot->unlock();
+  return p;
+}
+
 AREXPORT double arrobot_radius()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   return robot->getRobotRadius();
 }
 
 AREXPORT double arrobot_width()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   return robot->getRobotWidth();
 }
 
 AREXPORT double arrobot_length()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   return robot->getRobotLength();
 }
 
 AREXPORT double arrobot_getleftvel()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double v = robot->getLeftVel();
@@ -330,7 +361,8 @@ AREXPORT double arrobot_getleftvel()
 
 AREXPORT double arrobot_getrightvel()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0.0);
   robot->lock();
   double v = robot->getRightVel();
@@ -340,7 +372,8 @@ AREXPORT double arrobot_getrightvel()
 
 AREXPORT int arrobot_isleftstalled()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 1;
   AR_ASSERT_RETURN_VAL(robot, 1);
   robot->lock();
   bool v = robot->isLeftMotorStalled();
@@ -350,7 +383,8 @@ AREXPORT int arrobot_isleftstalled()
 
 AREXPORT int arrobot_isrightstalled()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 1;
   AR_ASSERT_RETURN_VAL(robot, 1);
   robot->lock();
   bool v = robot->isRightMotorStalled();
@@ -360,7 +394,8 @@ AREXPORT int arrobot_isrightstalled()
 
 AREXPORT int arrobot_isstalled()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 1;
   AR_ASSERT_RETURN_VAL(robot, 1);
   robot->lock();
   bool v = robot->isRightMotorStalled() || robot->isLeftMotorStalled();
@@ -370,7 +405,8 @@ AREXPORT int arrobot_isstalled()
 
 AREXPORT char arrobot_getdigin()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0;
   AR_ASSERT_RETURN_VAL(robot, 0);
   robot->lock();
   char v = robot->getDigIn();
@@ -381,6 +417,7 @@ AREXPORT char arrobot_getdigin()
 AREXPORT void arrobot_setdigout(char c)
 {
     AR_DEBUG_LOGINFO();
+	if(!connected) return;
     AR_ASSERT_RETURN(robot);
     robot->lock();
 	robot->com2Bytes(ArCommands::DIGOUT, (char)0xFF, c);
@@ -389,7 +426,8 @@ AREXPORT void arrobot_setdigout(char c)
 
 AREXPORT double  arrobot_getsonarrange(int i)
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0.0;
   AR_ASSERT_RETURN_VAL(robot, 0);
   robot->lock();
   int v = robot->getSonarRange(i);
@@ -399,7 +437,8 @@ AREXPORT double  arrobot_getsonarrange(int i)
 
 AREXPORT int arrobot_getnumsonar()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return 0;
   AR_ASSERT_RETURN_VAL(robot, 0);
   robot->lock();
   int n = robot->getNumSonar();
@@ -411,6 +450,7 @@ AREXPORT int arrobot_getnumsonar()
 AREXPORT void arrobot_getsonar(double s[AR_MAX_NUM_SONAR])
 {
     AR_DEBUG_LOGINFO();
+	if(!connected) return;
     robot->lock();
     for(int i = 0; i < robot->getNumSonar(); ++i)
     {
@@ -419,9 +459,12 @@ AREXPORT void arrobot_getsonar(double s[AR_MAX_NUM_SONAR])
     robot->unlock();
 }
 
+
 AREXPORT void arrobot_setpose(double x, double y, double th)
 {
-	AR_DEBUG_LOGINFO();
+
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->moveTo(ArPose(x, y, th));
@@ -430,19 +473,32 @@ AREXPORT void arrobot_setpose(double x, double y, double th)
 
 AREXPORT void arrobot_stop()
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->stop();
   robot->unlock();
 }
 
+AREXPORT void arrobot_setvels(arpose v)
+{
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
+  robot->lock();
+  robot->setVel(v.x);
+  robot->setLatVel(v.y);
+  robot->setRotVel(v.th);
+  robot->unlock();
+}
+
+
 AREXPORT void arrobot_setvel(double vel)
 {
-	AR_DEBUG_LOGINFO();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
-  ArLog::log(ArLog::Normal, "setVel(%f)\n", vel);
   robot->setVel(vel);
   robot->unlock();
 }
@@ -450,6 +506,7 @@ AREXPORT void arrobot_setvel(double vel)
 AREXPORT void arrobot_setwheelvels(double left, double right)
 {
 	AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->setVel2(left, right);
@@ -459,6 +516,7 @@ AREXPORT void arrobot_setwheelvels(double left, double right)
 AREXPORT void arrobot_setrotvel(double rotvel)
 {
 	AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->setRotVel(rotvel);
@@ -468,6 +526,7 @@ AREXPORT void arrobot_setrotvel(double rotvel)
 AREXPORT void arrobot_setlatvel(double vel)
 {
 	AR_DEBUG_LOGINFO();
+	if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->setLatVel(vel);
@@ -478,6 +537,7 @@ AREXPORT double arrobot_getbatteryvoltage()
 {
 	double v;
 	AR_DEBUG_LOGINFO();
+	if(!connected) return 0.0;
 	AR_ASSERT_RETURN_VAL(robot, 0.0);
 	robot->lock();
 	v = robot->getRealBatteryVoltage();
@@ -490,6 +550,7 @@ AREXPORT int arrobot_num_front_bumpers()
 {
 	int n;
 	AR_DEBUG_LOGINFO();
+	if(!connected) return 0;
 	AR_ASSERT_RETURN_VAL(robot, 0);
 	robot->lock();
 	n = robot->getNumFrontBumpers();
@@ -501,6 +562,7 @@ AREXPORT int arrobot_num_rear_bumpers()
 {
 	int n;
 	AR_DEBUG_LOGINFO();
+	if(!connected) return 0;
 	AR_ASSERT_RETURN_VAL(robot, 0);
 	robot->lock();
 	n = robot->getNumRearBumpers();
@@ -513,6 +575,7 @@ AREXPORT void arrobot_get_bumpers(char *front, char *rear)
 {
 	int s;
 	AR_DEBUG_LOGINFO();
+	if(!connected) return;
 	AR_ASSERT_RETURN(robot);
 	robot->lock();
 	s = robot->getStallValue();
@@ -529,7 +592,8 @@ AREXPORT int arrobot_get_front_bumper(int i)
 {
 	char fb;
 	AR_DEBUG_LOGINFO();
-	AR_ASSERT_RETURN_VAL(robot, 0.0);
+	if(!connected) return 0;
+	AR_ASSERT_RETURN_VAL(robot, 0);
 	arrobot_get_bumpers(&fb, NULL);
 	return fb & (ArUtil::BIT0 << i);
 }
@@ -539,7 +603,8 @@ AREXPORT int arrobot_get_rear_bumper(int i)
 {
 	char rb;
 	AR_DEBUG_LOGINFO();
-	AR_ASSERT_RETURN_VAL(robot, 0.0);
+	if(!connected) return 0;
+	AR_ASSERT_RETURN_VAL(robot, 0);
 	arrobot_get_bumpers(NULL, &rb);
 	return rb & (ArUtil::BIT0 << i);
 }
@@ -547,15 +612,44 @@ AREXPORT int arrobot_get_rear_bumper(int i)
 AREXPORT void arrobot_setdeltaheading(double d)
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   robot->setDeltaHeading(d);
   robot->unlock();
 }
 
+AREXPORT void arrobot_command(int c)
+{
+  AR_DEBUG_LOGINFO();
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->com(c);
+  robot->unlock();
+}
+
+AREXPORT void arrobot_command_int(int c, int a)
+{
+  AR_DEBUG_LOGINFO();
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->comInt(c, a);
+  robot->unlock();
+}
+
+AREXPORT void arrobot_command_2bytes(int c, char b1, char b2)
+{
+  AR_DEBUG_LOGINFO();
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->com2Bytes(c, b1, b2);
+  robot->unlock();
+}
+
 AREXPORT void arrobot_resetpos()
 {
   AR_DEBUG_LOGINFO();
+  if(!connected) return;
   AR_ASSERT_RETURN(robot);
   robot->lock();
   ArPose p = robot->getPose();
@@ -567,9 +661,10 @@ AREXPORT void arrobot_resetpos()
 
 AREXPORT void arrobot_move(double d)
 {
-	AR_DEBUG_LOGINFO();
-	AR_ASSERT_RETURN(robot);
-	robot->lock();
-	robot->move(d);
-	robot->unlock();
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->move(d);
+  robot->unlock();
 }

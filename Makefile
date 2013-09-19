@@ -23,7 +23,7 @@ testcs: test.c ../lib/libariacs.so ariac.h
 tests: test.c ../lib/libariac.a ariac.h
 	$(CC) -std=c99 -fPIC -I../include -o $@ $< -L../lib -Wl,-static  -Wl,-Bstatic -lariac
 
-../lib/libariac.so: ariac.cpp ariac.h 
+../lib/libariac.so: ariac.cpp ariac.h  ../lib/libAria.so
 	$(CXX) -fPIC -shared -I../include -o $@ $< -L../lib -lAria -lpthread -ldl -lrt -lm
 
 ../lib/libariac.a: ariac.cpp ariac.h ../lib/libAria.a
@@ -41,6 +41,16 @@ tests: test.c ../lib/libariac.a ariac.h
 ../lib/libAria.a: FORCE
 	$(MAKE) -C .. lib/libAria.a
 
+dist: README.txt README.rtf README.pdf simulink-STF/README.txt simulink-STF/README.pdf simulink-STF/README.rtf
+
+%.rtf: %.md
+	pandoc -s --toc --template pandoc_template -f markdown -t rtf -o $@ $<
+
+%.txt: %.md
+	pandoc -s --toc -f markdown -t plain -o $@ $<
+
+%.pdf: %.md
+	pandoc -s --toc -f markdown -o $@ $<
 
 FORCE:
 

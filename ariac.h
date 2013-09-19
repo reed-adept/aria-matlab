@@ -53,19 +53,20 @@ On Windows, link to Aria or AriaDebug, ws2_32 and winmm, and include the ARIA
 lib directory in the linker path. (Include the ARIA bin directory in system path
 or copy DLLs when running the program.)
 
+To use, first initialize ARIA with aria_init(). You can pass in program command line options which will be parsed and loaded into ARIA.
+To connect to the robot, then call arrobot_connect().  1 will be returned on error.  ARIA's ArRobot background processing thread for
+communications with the robot and other background tasks will be started.
+
 Once connection is finished, then accessor functions (arrobot_get* and arrobot_set*) may be called from multiple
 threads (since they access ARIA in a thread safe way), but connection and
 disconnection must happen separately from access. 
 
+If any accessor functions are called before the robot connection is made, they are ignored and exit. (This is intentional, to
+support use in environments such as Simulink that will be continuously syncronizing robot state, even before the user 
+initiates the robot connection.)
+
 */
     
-AREXPORT void arloginfo(const char *m);
-
-/*unused:*/
-/*AREXPORT void load_aria();*/
-/*AREXPORT void unload_aria();*/
-/*AREXPORT void start_arrobot();*/
-/*AREXPORT void terminate_arrobot();*/
 
 /** Initialize library, store references to command line arguments if given.
  * Only needs to be called once before any other functions. */
@@ -73,6 +74,9 @@ AREXPORT int aria_init(int argc, char **argv);
 
 /** Set a log message handler to call in addition to printing to normal ArLog output destination (which is console/stdout by default) */
 AREXPORT void aria_setloghandler(void(*logfn)(const char*));
+
+/** Print internal ariac debugging information */
+AREXPORT void arloginfo(const char *m);
 
 /** Try connecting to the robot, enable robot motors, then
     start ArRobot's background communications thread.
@@ -97,12 +101,16 @@ AREXPORT void arrobot_wait();
 /** Exit program after quick disconnection from robot and other devices. */
 AREXPORT void aria_exit(int code);
 
+typedef struct {double x; double y; double th;} arpose;
+
 AREXPORT double arrobot_getx();
 AREXPORT double arrobot_gety();
 AREXPORT double arrobot_getth();
+AREXPORT arpose arrobot_getpose();
 AREXPORT double arrobot_getvel();
 AREXPORT double arrobot_getrotvel();
 AREXPORT double arrobot_getlatvel();
+AREXPORT arpose arrobot_getvels();
 AREXPORT double arrobot_radius();
 AREXPORT double arrobot_width();
 AREXPORT double arrobot_length();
@@ -116,12 +124,37 @@ AREXPORT double arrobot_getsonarrange(int i);
 AREXPORT int arrobot_getnumsonar();
 #define AR_MAX_NUM_SONAR 16
 AREXPORT void arrobot_getsonar(double s[AR_MAX_NUM_SONAR]);
+
+/** Change (move) stored robot position to the pose given by @a p,
+ *  and transform current range sensor readings and other positions affected by
+ *  robot pose. All future position updates received from the robot will
+ *  continue to be relative to this point.
+ */
+AREXPORT void arrobot_movepose_p(arpose p);
+
+/** Change (move) stored robot position to the pose given by @a x, @a y, @a z,
+ *  and transform current range sensor readings and other positions affected by
+ *  robot pose. All future position updates received from the robot will
+ *  continue to be relative to this point.
+ */
 AREXPORT void arrobot_setpose(double x, double y, double th);
+
+/** Change (move) stored robot position to the pose given by @a p,
+ *  and transform current range sensor readings and other positions affected by
+ *  robot pose. All future position updates received from the robot will
+ *  continue to be relative to this point.
+ */
+void arrobot_setpose_p(arpose p)
+{
+	arrobot_setpose(p.x, p.y, p.th);
+}
+
+
 AREXPORT void arrobot_stop();
 AREXPORT void arrobot_setvel(double vel);
 AREXPORT void arrobot_setwheelvels(double left, double right);
 
-///@deprecated
+/** @deprecated */
 void arrobot_setvel2(double left, double right)
 {
   arrobot_setwheelvels(left, right);
@@ -129,6 +162,7 @@ void arrobot_setvel2(double left, double right)
 
 AREXPORT void arrobot_setrotvel(double rotvel);
 AREXPORT void arrobot_setlatvel(double vel);
+AREXPORT void arrobot_setvels(arpose v);
 AREXPORT void arrobot_setdeltaheading(double dh);
 AREXPORT void arrobot_setdigout(char c);
 AREXPORT double arrobot_getbatteryvoltage();
@@ -144,12 +178,19 @@ AREXPORT char arrobot_get_rear_bumpers();
 /** Return 1 if front bumper @arg i is currently pressed */
 AREXPORT int arrobot_get_rear_bumper(int i);
 
+/** Send any protocol command to the robot */
+AREXPORT void arrobot_command(int c);
+/** Send any protocol command to the robot */
+AREXPORT void arrobot_command_int(int c, int a);
+/** Send any protocol command to the robot */
+AREXPORT void arrobot_command_2bytes(int c, char b1, char b2);
+
 AREXPORT void arrobot_resetpos();
 
 AREXPORT void arrobot_move(double d);
 
 #ifdef __cplusplus
-} // close extern "C"
+} /* close extern "C" */
 #endif
 
 #endif
