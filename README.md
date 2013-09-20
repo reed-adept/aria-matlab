@@ -23,7 +23,7 @@ Requirements:
 * Matlab 2012b or 2013a (other versions may work but are untested)
 * Windows 7 
 
-(Linux, using G++ 4.x, or other versions of Windows, may work, but is untested.)
+(Linux, using G++ 4.x, or other versions of Windows, may work, but are currently untested.)
 
 Build:
 
@@ -138,7 +138,7 @@ Get range (mm) of sonar sensor i.
 
 Get ranges (mm) of all sonar sensors
 
-`arrobot_setdigout d`
+`arrobot_setdigout(d)`
 
 Set state of digital output bits according to bitmask (8 bits)
 
@@ -146,7 +146,7 @@ Set state of digital output bits according to bitmask (8 bits)
 
 Get state (bitmask) of digital input bits (8 bits)
 
-`arrobot_command c [args]`
+`arrobot_command(c, [args])`
 
 Send any controller command to the robot (see robot manual). [args] can be one
 integer argument or two integers (for commands that take two byte arguments)
@@ -176,6 +176,10 @@ or similar, and a pointer stored in ariac (see how the ArRobot object and others
 created and stored). This object can be destroyed in the disconnect/exit 
 functions.  Generally, ariac should be robust against functions called more than 
 once, so check if the object has already been created before creating it a second time. 
+To avoid problems using Simulink, it is also recommended that functions check for 
+robot connection and other neccesary preconditions, and abort (return) if not able to continue
+rather than crashing.  (This allows some Simulink simulations to begin running even before
+the robot connection has finished.)
 
 If you have called any of the Aria functions in your currently running Matlab
 instance, run `clear all` in Matlab to unload the functions and the ariac
@@ -213,37 +217,38 @@ folder in the file browser, and then either  running `sdefs` in the command wind
 right clicking on `sdefs.m` in the file browser and choosing Run, or opening `sdefs.m`
 in the text editor and clicking "Run" in the toolbar.  For each function, the 
 sdefs.m script will generate an s-function wrapper and compile it, and generate a 
-simulink block in the ariac Simulink library (`simulink-library/ariac.mlx`),
+simulink block in the ariac Simulink library (`ariac-simulink-library/ariac.mlx`),
 and refresh Simulink's block library browser.  
 
 You can add simulink-library to your Matlab path for 
 the  block library to appear in the Simulink block library whenever you 
-run Matlab. Do this by right clicking on ariac-simulink-library in the Matlab
+run Matlab. Do this by right clicking on `ariac-simulink-library` in the Matlab
 file browser, choosing "Add To Path", and choosing "This Folder".
 
 Simulink Tips
 -------------
 
-* Run aria_init and arrobot_connnect in the Matlab command window before runnning
-  your Simulink model.  Or call them from model callbacks (see below)
-* You can set model callbacks to automatically stop robot motion by calling
-  arrobot_stop when pausing or stopping the Simulink simulation. To set model 
-  callbacks, use the drop down menu attached to the Model Configuration 
-  button in the toolbar in the model editor (the "gear" or "cog" icon) and choose 
-  Model Properties, then select the "Callbacks" tab, then enter Matlab code
-  to run on each of the conditions, such as StopFcn when the model is stopped, or
-  InitiFcn when first initialized.  For example, enter arrobot_stop for StopFcn
-  to stop robot motion if you stop the Simulink simulation. More information at
-  <http://www.mathworks.com/help/simulink/ug/model-callbacks.html>
 * Open the Model Configuration Parameters (the "gear" or "cog" icon) to set
-  the solver to "Fixed-step" and discrete or engine for continuous, and set the
-  fixed step size.
-* Make sure the ARIA matlab directory and ariac-simulink-library directory are in
+  the solver to appropriate behavior such as "Fixed-step", possible use the discrete
+  solver engine if desired,  set the fixed step size, and increase the simulation
+  end time (to let the simulation run for long enough to perform your tests and expermients.)
+* Run `aria_init` and `arrobot_connnect` in the Matlab command window before runnning
+  your Simulink model.  Or call them automatically from model callbacks (see next item below).
+* You can set model callbacks to perform actions such as automatically initalize
+  and connect to the robot, stop robot motion,
+  reset odometry, etc. when the Simulink model is initialized, stopped, etc. To set model 
+  callbacks, use the drop down menu attached to the "Model Configuration"
+  button in the toolbar in the model editor (the "gear" or "cog" icon) and choose 
+  "Model Properties", then select the "Callbacks" tab, then enter Matlab code
+  to run on each of the conditions.   For example, enter `arrobot_stop` for `StopFcn`
+  to automatically stop robot motion if you stop the Simulink simulation. More information is at
+  <http://www.mathworks.com/help/simulink/ug/model-callbacks.html>
+* Make sure the ARIA matlab directory and `ariac-simulink-library` directory are in
   your Matlab path in order to see the AriaC blocks in the Simulink library browser,
   and for blocks to appear in your model. If ariac blocks are missing from your model,
-  re-add the matlab and ariac-simulink-library directories to your path, then right
+  re-add the matlab and `ariac-simulink-library` directories to your path, then right
   click and choose Refresh.   You can also regenerate the s-function ariac blocks
-  by running sdefs.m (see next section).
+  by running `sdefs.m` (see previous section).
 
 
 How to add new functions to the Simulink interface
@@ -273,7 +278,7 @@ If you have the optional Simulink Coder component, you can compile a Simulink sy
 and deploy it to  the robot's onboard computer via SSH, while viewing and starting/stopping
 system from the Simulink GUI on a remote laptop or other computer over wifi.  
 
-For details, see <Simulink External Mode.docx>.
+For details, see: <file:Simulink External Mode.docx>.
 
 External Mode is only supported on Windows operating systems at this time.
 
