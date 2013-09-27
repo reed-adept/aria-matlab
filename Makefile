@@ -7,9 +7,9 @@ ifndef CXX
 CXX=c++
 endif
 
-default: ../lib/libariac.so test
+default: ../lib/libariac.so test makemex
 
-all: ../lib/libariac.so ../lib/libariacs.so ../lib/libariac.a test testcs tests
+all: default ../lib/libariacs.so ../lib/libariac.a testcs tests
 
 clean: FORCE
 	rm -f test testcs tests ../lib/libariac.so ../lib/libariacs.so ../lib/libariac.a
@@ -51,6 +51,11 @@ dist: README.txt README.rtf README.pdf simulink-STF/README.txt simulink-STF/READ
 
 %.pdf: %.md
 	pandoc -s --toc -f markdown -o $@ $<
+
+PWD=$(shell pwd)
+
+makemex: makemex.m ariac.h
+	matlab -r "path(path, '$(PWD)') ; makemex ; quit"
 
 FORCE:
 

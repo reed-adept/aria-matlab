@@ -668,3 +668,35 @@ AREXPORT void arrobot_move(double d)
   robot->move(d);
   robot->unlock();
 }
+
+AREXPORT int arrobot_motors_enabled()
+{
+  AR_DEBUG_LOGINFO();
+  if(!connected) return false;
+  AR_ASSERT_RETURN_VAL(robot, false);
+  robot->lock();
+  int b = robot->areMotorsEnabled();
+  robot->unlock();
+  return b;
+}
+
+AREXPORT void arrobot_enable_motors()
+{
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->enableMotors();
+  robot->unlock();
+}
+
+
+AREXPORT void arrobot_disable_motors()
+{
+  AR_DEBUG_LOGINFO();
+  if(!connected) return;
+  AR_ASSERT_RETURN(robot);
+  robot->lock();
+  robot->disableMotors();
+  robot->unlock();
+}

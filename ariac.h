@@ -189,6 +189,10 @@ AREXPORT void arrobot_resetpos();
 
 AREXPORT void arrobot_move(double d);
 
+AREXPORT int arrobot_motors_enabled();
+AREXPORT void arrobot_enable_motors();
+AREXPORT void arrobot_disable_motors();
+
 #ifdef __cplusplus
 } /* close extern "C" */
 #endif

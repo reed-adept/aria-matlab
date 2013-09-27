@@ -16,14 +16,14 @@ A collection of C files (in mex-src) defines MEX interfaces for some of the
 functions in ARIA.
 
 
+## Windows Build ##
+
 Requirements: 
 
 * ARIA 2.7.5.2 or later <http://robots.mobilerobots.com/wiki/ARIA>
 * Visual Studio 2010 <http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express>
 * Matlab 2012b or 2013a (other versions may work but are untested)
 * Windows 7 
-
-(Linux, using G++ 4.x, or other versions of Windows, may work, but are currently untested.)
 
 Build:
 
@@ -34,31 +34,77 @@ Build:
    platform.  If you are on a 32-bit platform, use the Win32 target platform.
 3. Open Matlab and navigate to this matlab directory.
 4. Add this matlab directory to the Matlab path by right-clicking on it in the Matlab file browser and selecting "Add To Path" then "This Folder".
-5. Run makemex.m in Matlab to compile the Mex interfaces. It will also copy
+5. Run makemex.m in Matlab to compile the MEX interfaces. It will also copy
        `AriaVC10.dll` from bin or bin64 into the matlab directory.
  
  
-The Mex interfaces require `ariac.dll` and `AriaVC10.dll` to be present in the matlab directory to 
+The MEX interfaces require `ariac.dll` and `AriaVC10.dll` to be present in the matlab directory to 
 build and run.
  
 To run scripts/programs in Matlab, the matlab directory (containing the compiled
-Mex objects as well as ariac.dll and AriaVC10.dll) must be in your Matlab path. It can be added
+MEX objects as well as ariac.dll and AriaVC10.dll) must be in your Matlab path. It can be added
 by right-clicking on the matlab directory in the file browser in Matlab and selecting "Add To Path", then "This Folder".
 
 Or use the path command: 
-
-Linux:
-
-    path(path, '/usr/local/Aria/matlab')
-
-Windows:
 
     path(path, 'C:\Program Files\MobileRobots\Aria\matlab')
 
 Or if your current directory is the Aria matlab subdirectory: 
 
     path(path, '.')  
- 
+
+## Linux Build ##
+
+Requirements:
+
+* ARIA 2.7.5.2 or later <http://robots.mobilerobots.com/wiki/ARIA>
+* G++ compiler and GNU make installed (standard Linux development tools). The compiler version must
+match supported MEX compiler (see below).
+* Matlab 2012a or later
+
+Build:
+
+1. This directory should be a subdirectory of ARIA named `matlab` (see above).
+2. Enter the matlab directory and run `make`. This will build the `libariac.so` C 
+library in `/usr/local/Aria/lib`, and will run Matlab commands in `makemex.m` to 
+build the MEX interface.  You can also run `makemex` within Matlab. If the 
+`matlab` command is not in your PATH, you can add it:
+    export PATH=$PATH:/usr/local/MATLAB/R2012b/bin
+Substitute the correct installation location and version for your Matlab installation.
+If any warnings are printed regarding unsupported compiler versions, you may need
+to switch to a supported compiler as reported by Matlab.  You can do so by 
+installing the correct compiler, setting the CC and CXX environment variables
+to that compiler command, and rebuilding ARIA and ariac (enter `/usr/local/Aria`,
+run `make clean`, then enter the `matlab` directory, and re-run `make`.
+3. Run `ldconfig` as root, so that the new `libariac.so` library is usable.
+
+The ARIA matlab directory (containing the compiled MEX interfaces) must be in your Matlab path.
+It can be added bf right-clicking on the Aria matlab directory in the GUI and selecting
+"Add To Path" then "This Folder", or by using the path command:
+
+    path(path, '/usr/local/Aria/matlab')
+
+If you wish to always add the Aria matlab directory to your Matlab path, you can do so in
+one of two ways:
+
+You an append `/usr/local/Aria/matlab` to the `MATLABPATH` environment variable in your
+`.matlab7rc.sh` script in your home directory if you wish to permanently add 
+the Aria matlab directory to your Matlab path:
+
+    export MATLABPATH=$MATLABPATH:/usr/local/Aria/matlab
+
+(See <http://www.mathworks.com/help/matlab/ref/matlabunix.html> for more about the `.matlab7rc.sh` script)
+
+Or, you can create a `startup.m` script in a directory where you will keep your Matlab
+scripts that use the Aria interface.  If you run the `matlab` command from within
+this directory, then Matlab will automatically run `startup.m`.  Your `startup.m`
+can use the `path` function to add the Aria matlab directory to the path, and execute
+any other commands you wish.
+
+    path(path, '/usr/local/Aria/matlab')
+
+## Usage ##
+
 See `example.m` for a simple example of use.
  
 So far, the following functions are available:

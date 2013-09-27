@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     for(int c = 0; c < 10; ++c)
     {
       arrobot_connect(); // should skip connection if already connected.
-      printf("x=%.1f y=%.1f th=%.1f vel=%.1f rotvel=%.1f left=%.1f right=%.1f stall=%d\n",
+      printf("x=%.1f y=%.1f th=%.1f vel=%.1f rotvel=%.1f left=%.1f right=%.1f stall=%d battv=%.1f\n",
         arrobot_getx(),
         arrobot_gety(),
         arrobot_getth(),
@@ -28,12 +28,13 @@ int main(int argc, char **argv)
         arrobot_getrotvel(),
         arrobot_getleftvel(),
         arrobot_getrightvel(),
-        arrobot_isstalled()
+        arrobot_isstalled(),
+	arrobot_getbatteryvoltage()
       );
       printf("sonar");
       for(int i = 0; i < arrobot_getnumsonar(); ++i)
       {
-        printf(" %d=%d", i, arrobot_getsonarrange(i));
+        printf(" %d=%f", i, arrobot_getsonarrange(i));
       }
       puts("");
       sleep(1);

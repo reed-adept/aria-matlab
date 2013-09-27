@@ -1,4 +1,3 @@
-echo on
 
 funcs = {
     'aria_init',  
@@ -33,7 +32,10 @@ funcs = {
     'arrobot_setvels',
     'arrobot_getpose',
     'arrobot_setpose',
-    'arrobot_move'
+    'arrobot_move',
+    'arrobot_motorsenabled',
+    'arrobot_enable_motors',
+    'arrobot_disable_motors'
 }
 
 % Unload old mex functions etc.  Note, if you add a new mex function above that
@@ -86,8 +88,9 @@ eval(['copyfile ' ariadll ' .'])
 
 % Compile all the mex functions listed above:
 
-for i = 1:length(funcs)
-  cmd = sprintf('mex -g -v %s -DMATLAB -I. %s %s mex-src/%s.c', def, ariaclink, arialink, funcs{i});
+for i = 1:length(funcs);
+  disp(funcs{i});
+  cmd = sprintf('mex -g %s -DMATLAB -I. %s %s mex-src/%s.c', def, ariaclink, arialink, funcs{i});
   cmd;
   eval(cmd);
 end;
