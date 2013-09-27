@@ -68,8 +68,8 @@ Build:
 2. Enter the matlab directory and run `make`. This will build the `libariac.so` C 
 library in `/usr/local/Aria/lib`, and will run Matlab commands in `makemex.m` to 
 build the MEX interface.  You can also run `makemex` within Matlab. If the 
-`matlab` command is not in your PATH, you can add it:
-    export PATH=$PATH:/usr/local/MATLAB/R2012b/bin
+`matlab` command is not in your PATH, you can add it with this shell command:
+`export PATH=$PATH:/usr/local/MATLAB/R2012b/bin`
 Substitute the correct installation location and version for your Matlab installation.
 If any warnings are printed regarding unsupported compiler versions, you may need
 to switch to a supported compiler as reported by Matlab.  You can do so by 
@@ -79,7 +79,7 @@ run `make clean`, then enter the `matlab` directory, and re-run `make`.
 3. Run `ldconfig` as root, so that the new `libariac.so` library is usable.
 
 The ARIA matlab directory (containing the compiled MEX interfaces) must be in your Matlab path.
-It can be added bf right-clicking on the Aria matlab directory in the GUI and selecting
+It can be added by right-clicking on the Aria matlab directory in the GUI and selecting
 "Add To Path" then "This Folder", or by using the path command:
 
     path(path, '/usr/local/Aria/matlab')
@@ -162,7 +162,19 @@ Get battery voltage (real voltage, e.g. 0..12 for 12V system, 0..24 for 24V syst
 
 `s = arrobot_isleftstalled`
 
+
 Return 1 if either wheel motor is in stalled state
+
+`e = arrobot_motorsenabled`
+
+Return 1 if the motors are enabled, or 0 if disabled (by disable command or e-stop button)
+
+`arrobot_enable_motors`
+
+`arrobot_disable_motors`
+
+Enable or disable the motors. Use `arrobot_enable_motors` to manually re-enable the motors if disabled
+due to e-stop button or other event.
 
 `l = arrobot_length`
 
