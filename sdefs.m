@@ -52,13 +52,13 @@ funcs = {
     {'arrobot_getx', 'double y1 = arrobot_getx()', 'X position of mobile robot (mm)'}
     {'arrobot_gety', 'double y1 = arrobot_gety()', 'Y position of mobile robot (mm)'}
     {'arrobot_getth', 'double y1 = arrobot_getth()', 'Orientation (theta) of mobile robot (degrees)'}
-    {'arrobot_setvel', 'void arrobot_setvel(double u1)', 'Set forward/back velocity of mobile robot (mm/sec)'}
-    {'arrobot_setrotvel', 'void arrobot_setrotvel(double u1)', 'Set rotational velocity of mobile robot (deg/sec, counterclockwise +)'}
-    {'arrobot_setlatvel', 'void arrobot_setlatvel(double u1)', 'Set lateral velocity of mobile robot (Seekur only) (mm/sec, rightwards +)'}
-    {'arrobot_setwheelvels', 'void arrobot_setwheelvels(double u1, double u2)', 'Set left, right wheel velocities separately (mm/sec), overrides vel, rotvel (Note: not implemented in Seekur or LX)'}
+    {'arrobot_setvel', 'void arrobot_setvel(double u1)', 'Send command to set forward/back velocity of mobile robot (mm/sec)'}
+    {'arrobot_setrotvel', 'void arrobot_setrotvel(double u1)', 'Send command to set rotational velocity of mobile robot (deg/sec, counterclockwise +)'}
+    {'arrobot_setlatvel', 'void arrobot_setlatvel(double u1)', 'Send command to set lateral velocity of mobile robot (Seekur only) (mm/sec, rightwards +)'}
+    {'arrobot_setwheelvels', 'void arrobot_setwheelvels(double u1, double u2)', 'Send command to set left, right wheel velocities separately (mm/sec), overrides vel, rotvel (Note: not implemented in Seekur or LX)'}
     {'arrobot_getvel', 'double y1 = arrobot_getvel()', 'Get current forward/back velocity of mobile robot (mm/sec)'}
     {'arrobot_getrotvel', 'double y1 = arrobot_getrotvel()', 'Get current rotational velocity of mobile robot (deg/sec, counterclockwise +)'}
-    {'arrobot_stop', 'void arrobot_stop()', 'Stop robot movement'}
+    {'arrobot_stop', 'void arrobot_stop()', 'Send command to stop robot movement'}
     {'arrobot_setdeltaheading', 'void arrobot_setdeltaheading(double u1)', 'Request a heading offset to turn to'}
     {'arrobot_getlatvel', 'double y1 = arrobot_getlatvel()', 'Current lateral velocity of mobile robot (Seekur only) (mm/sec)'}
     {'arrobot_move', 'void arrobot_move(double u1)', 'Request a translation distance (forward/backward) to drive robot to.'}
@@ -80,6 +80,9 @@ funcs = {
 	{'arrobot_getrearbumper', 'int32 y1 = arrobot_get_rear_bumper(int32 p1)', 'Get range reading from one front bumper (0-indexed) of mobile robot'}
  {'arrobot_getdigin', 'int8 y1 = arrobot_getdigin()', 'Get current state of digital inputs (Pioneer only)'}
     {'arrobot_setdigout', 'void arrobot_setdigout(int8 u1)', 'Set state of digital outputs (Pioneer only)'}
+	{'arrobot_motorsenabled', 'int32 y1 = arrobot_motorsenabled()', 'Are motors enabled?'}
+	{'arrobot_enable_motors', 'void arrobot_enable_motors()', 'Send command to enable or re-enable motors'}
+	{'arrobot_disable_motors', 'void arrobot_disable_motors()', 'Send command to disable motors'}
 
     };
 
