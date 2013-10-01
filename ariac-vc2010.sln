@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ariac-dll", "ariac-dll-vc2010.vcxproj", "{7857CFD2-AECB-222E-FCD4-6E54405BD838}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ariac-dll", "ariac-dll-vc2010.vcxproj", "{40296FDA-F15A-772A-7C9B-E11140048FFD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{606257AE-E882-4C66-84C0-72331642D09F} = {606257AE-E882-4C66-84C0-72331642D09F}
 	EndProjectSection
@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AriaDLL", "..\src\AriaDLL-v
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ariac-test-vc2010", "ariac-test-vc2010.vcxproj", "{FE4061F4-C7B8-483E-939C-D19BFF53598C}"
 	ProjectSection(ProjectDependencies) = postProject
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838} = {7857CFD2-AECB-222E-FCD4-6E54405BD838}
+		{40296FDA-F15A-772A-7C9B-E11140048FFD} = {40296FDA-F15A-772A-7C9B-E11140048FFD}
 	EndProjectSection
 EndProject
 Global
@@ -20,14 +20,14 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Debug|Win32.Build.0 = Debug|Win32
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Debug|x64.ActiveCfg = Debug|x64
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Debug|x64.Build.0 = Debug|x64
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Release|Win32.ActiveCfg = Release|Win32
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Release|Win32.Build.0 = Release|Win32
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Release|x64.ActiveCfg = Release|x64
-		{7857CFD2-AECB-222E-FCD4-6E54405BD838}.Release|x64.Build.0 = Release|x64
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Debug|Win32.Build.0 = Debug|Win32
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Debug|x64.ActiveCfg = Debug|x64
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Debug|x64.Build.0 = Debug|x64
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Release|Win32.ActiveCfg = Release|Win32
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Release|Win32.Build.0 = Release|Win32
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Release|x64.ActiveCfg = Release|x64
+		{40296FDA-F15A-772A-7C9B-E11140048FFD}.Release|x64.Build.0 = Release|x64
 		{606257AE-E882-4C66-84C0-72331642D09F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{606257AE-E882-4C66-84C0-72331642D09F}.Debug|Win32.Build.0 = Debug|Win32
 		{606257AE-E882-4C66-84C0-72331642D09F}.Debug|x64.ActiveCfg = Debug|x64
